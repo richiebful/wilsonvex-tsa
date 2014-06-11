@@ -9,6 +9,9 @@
 
 int lift_speed = 50;
 int lift_period = 2000;
+int rightturn = 1000; //millis to execute right turn
+int turnaround = -2000;
+int leftturn = -1000;
 
 void rotate(int check1){
 	int wheel_setting = 20;
@@ -93,9 +96,6 @@ void rotIn(int period){
 	motor[whiskL] = motor[whiskR] = 0;
 }
 
-int rightturn = 1000; //millis to execute right turn
-int turnaround = -2000;
-int leftturn = -1000;
 
 //all tasks are of form auto<autonomous-version><color><location>
 //location is "A" for closest to bar, "B" for other position
@@ -113,7 +113,7 @@ task auto1blueA(){
 	moveForward(Ti2);
 	rotate(rightturn);
 	moveForward(Ti3);
-	startTask(deckUp);
+	StartTask(deckUp);
 	rotOut(Ti4);
 	rotate(turnaround);
 	rotate(leftturn);
@@ -132,7 +132,7 @@ task auto1redA(){
 	moveForward(Ti2);
 	rotate(leftturn);
 	moveForward(Ti3);
-	startTask(deckUp);
+	StartTask(deckUp);
 	rotOut(Ti4);
 	rotate(turnaround);
 	rotate(rightturn);
@@ -148,7 +148,7 @@ task auto2blueA(){
 	rotIn(Ti2);
 	rotate(rightturn);
 	moveForward(Ti3);
-	startTask(deckUp);
+	StartTask(deckUp);
 	throw();
 	rotate(leftturn);
 	moveForward(Ti4);
@@ -158,7 +158,7 @@ task auto2blueA(){
 
 task auto2redA(){
 	int Ti1 = 1000;
-	int Ti2 = 2000;//get Blue Ball
+	int Ti2 = 2000;//get Red Ball
 	int Ti3 = 3000;
 	int Ti4 = 2400;
 	int Ti5 = 2000;
@@ -166,7 +166,7 @@ task auto2redA(){
 	rotIn(Ti2);
 	rotate(leftturn);
 	moveForward(Ti3);
-	startTask(deckUp);
+	StartTask(deckUp);
 	throw();
 	rotate(rightturn);
 	moveForward(Ti4);
