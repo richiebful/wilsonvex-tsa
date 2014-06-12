@@ -347,11 +347,10 @@ void auto3blueB(void){
 	deckOff();
 	rotOff();
 }
-
 void auto3redB(void){
 	int Ti1 = 1000;	//time to get to rails
-	int Ti2 = 700; //time to get into position to knock balls over rail
-	int Ti3 = 500; //time to rotate and knock balls over rail
+	int Ti2 = 1215; //time to get into position to knock balls over rail
+	int Ti3 = 1300; //time to rotate and knock balls over rail
 	int Ti4 = 3000; // time to get to goal post
 	int Ti5 = 2000; // time to let bucky ball out
 	//get whisks ready
@@ -361,28 +360,27 @@ void auto3redB(void){
 	//elevate platform
 	deckUp();
 	wait1Msec(500);
+	deckRemain();
 	//go forward
 	moveForward(1);
 	wait1Msec(Ti1);
 	stopWheels();
 	//Turn left
-	rotate(rightturn);
-	wait1Msec(rightturn);
+	rotate(leftturn);
+	wait1Msec(-leftturn);
 	stopWheels();
 	//move into position for goal and second large ball
 	moveForward(1);
 	wait1Msec(Ti2);
-	deckOff();
 	stopWheels();
 	//take right turn
 	rotate(leftturn);
 	wait1Msec(leftturn);
 	stopWheels();
-	rotIn();
-
 	//back up and shut off moving deck up
+	//turn towards goal
 	moveForward(-1);
-	wait1Msec(500);
+	wait1Msec(600);
 	stopWheels();
 	//move deck all the way down
 	deckDown();
@@ -390,17 +388,20 @@ void auto3redB(void){
 	deckOff();
 	//move up to the to the foot of the goal
 	moveForward(1);
-	wait1Msec(1000);
-	deckUp();
-	wait1Msec(1500);
+	wait1Msec(1700);
 	stopWheels();
 	//elevate deck and rotate whisks outward to score a "goal"
+	deckUp();
 	wait1Msec(1500);
+	moveForward(1);
+	wait1Msec(1000);
+	stopWheels();
 	rotOut();
 	wait1Msec(2000);
 	deckOff();
 	rotOff();
 }
+
 
 task main(){
 	auto3blueB();
