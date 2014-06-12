@@ -125,67 +125,70 @@ task spin()
 }
 //+++++++++++++++++++++++++++++++++++++++++++++| MAIN |+++++++++++++++++++++++++++++++++++++++++++++++
 
-task main()
-{
-while(1==1)
- {
-  StartTask(Drive);   /*driver 1*/
-	StartTask(Lift);   /*driver 2*/
-  StartTask(throw);	/*driver 1*/
-	StartTask(bar);		/*driver 2*/
-	StartTask(spin);	/*driver 2*/
- }
-}
+//task main()
+//{
+//while(1==1)
+// {
+//  StartTask(Drive);   /*driver 1*/
+//	StartTask(Lift);   /*driver 2*/
+//  StartTask(throw);	/*driver 1*/
+//	StartTask(bar);		/*driver 2*/
+//	StartTask(spin);	/*driver 2*/
+// }
+//}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-int lift_speed = 50;
+int lift_speed = 60;
 int lift_period = 2000;
-int rightturn = 1000; //millis to execute right turn
+int rightturn = 700; //millis to execute right turn
 int turnaround = -2000;
-int leftturn = -1000;
+int leftturn = -650;
 
-void rotate(int check1){
-	int wheel_setting = 20;
+void rotate(signed int check1){
+	int wheel_setting = 100;
 	if (check1 < 0){
+		check1 = -check1;
+		wheel_setting = -wheel_setting;
 		ClearTimer(T1);
-		while (time1[T1] < check1){
-			motor[RwheelL]= motor[FwheelL] = wheel_setting;
-			motor[RwheelR] = motor[FwheelR] = -wheel_setting;
-		}
+		motor[RwheelL]= motor[FwheelL] = wheel_setting;
+		motor[RwheelR] = motor[FwheelR] = wheel_setting;
+		while (time1[T1] < check1){}
 		motor[RwheelR] = motor[FwheelR] = 0;
 		motor[RwheelL] = motor[FwheelL] = 0;
   }
   else if(check1 > 0){
   	ClearTimer(T1);
+  	motor[RwheelL]= motor[FwheelL] = wheel_setting;
+  	motor[RwheelR] = motor[FwheelR] = wheel_setting;
   	while (time1[T1] < check1){
-  		motor[RwheelL]= motor[FwheelL] = -wheel_setting;
-  		motor[RwheelR] = motor[FwheelR] = wheel_setting;
   	}
   	motor[RwheelL] = motor[FwheelL] = 0;
   	motor[RwheelR] = motor[FwheelR] = 0;
 	}
 }
 
-task deckUp(){
+void deckUp(void){
 	motor[liftL] = lift_speed;
-	motor[liftR] = -lift_speed;
+	motor[liftR] = lift_speed;
 	ClearTimer(T1);
 	while(time1[T1] < lift_period){
-		wait10Msec(10);
+
 	}
 	motor[liftL] = 0;
 	motor[liftR] = 0;
 }
 
 void moveForward(int period){
-	int wheel_setting = 50;
-	motor[RwheelL] = motor[FwheelL] = -wheel_setting;
-	motor[RwheelR] = motor[FwheelR] = wheel_setting;
+	int left_speed = 80;
+	int right_speed = -85;
+	motor[RwheelL] = motor[FwheelL] = left_speed;
+	motor[RwheelR] = motor[FwheelR] = right_speed;
 	ClearTimer(T1);
 	while(time1[T1] < period){
-		wait10Msec(10);
+
 	}
+	motor[RwheelR] = motor[FwheelR]= motor[RwheelL] = motor[FwheelL] = 0;
 }
 
 task deckDown(){
@@ -206,25 +209,21 @@ void throwauto(void){
 }
 
 void rotOut(int period){
-	int rot_speed = 50;
+	int rot_speed = 80;
 	motor[whiskL] = -rot_speed;
 	motor[whiskR] = rot_speed;
 	ClearTimer(T1);
-	while(time1[T1] < period){
-		wait10Msec(10);
-	}
+	while(time1[T1] < period){}
 	motor[whiskL] = motor[whiskR] = 0;
 }
 
 //rotates the whisks to bring balls in
 void rotIn(int period){
-	int rot_speed = 50;
+	int rot_speed = 80;
 	motor[whiskL] = rot_speed;
 	motor[whiskR] = -rot_speed;
 	ClearTimer(T1);
-	while(time1[T1] < period){
-		wait10Msec(10);
-	}
+	while(time1[T1] < period){}
 	motor[whiskL] = motor[whiskR] = 0;
 }
 
@@ -232,7 +231,7 @@ void rotIn(int period){
 //all tasks are of form auto<autonomous-version><color><location>
 //location is "A" for closest to bar, "B" for other position
 
-task auto1blueA(){
+void auto1blueA(void){
 	//setup: have it facing towards the blue hanging pole, parallel to the side
 	//spin whisks inward left clockwise, right counter-c.
 	int Ti1 = 2000;//time to get to gather bucky balls
@@ -245,7 +244,7 @@ task auto1blueA(){
 	moveForward(Ti2);
 	rotate(rightturn);
 	moveForward(Ti3);
-	StartTask(deckUp);
+	deckUp();
 	rotOut(Ti4);
 	rotate(turnaround);
 	rotate(leftturn);
@@ -264,7 +263,7 @@ task auto1redA(){
 	moveForward(Ti2);
 	rotate(leftturn);
 	moveForward(Ti3);
-	StartTask(deckUp);
+	deckUp();
 	rotOut(Ti4);
 	rotate(turnaround);
 	rotate(rightturn);
@@ -280,7 +279,7 @@ task auto2blueA(){
 	rotIn(Ti2);
 	rotate(rightturn);
 	moveForward(Ti3);
-	StartTask(deckUp);
+	deckUp();
 	throwauto();
 	rotate(leftturn);
 	moveForward(Ti4);
@@ -298,7 +297,7 @@ task auto2redA(){
 	rotIn(Ti2);
 	rotate(leftturn);
 	moveForward(Ti3);
-	StartTask(deckUp);
+	deckUp();
 	throwauto();
 	rotate(rightturn);
 	moveForward(Ti4);
@@ -306,7 +305,8 @@ task auto2redA(){
 	moveForward(Ti5);
 }
 
-//task main(){
-//	wait10Msec(100);
-//	StartTask(auto1blueA);
-//}
+task main(){
+	moveForward(3000);
+	wait10Msec(100);
+	rotate(leftturn);
+}
