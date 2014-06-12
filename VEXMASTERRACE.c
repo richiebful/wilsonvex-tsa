@@ -138,9 +138,9 @@ task spin()
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-int lift_speed = 127;
-int rightturn = 650; //millis to execute right turn
-int leftturn = -575;
+int lift_speed = 100;
+int rightturn = 660; //millis to execute right turn
+int leftturn = -560;
 int turnaround = 1400;
 
 
@@ -174,8 +174,13 @@ void moveForward(int direction){
 }
 
 void deckDown(void){
-	motor[liftL] = -lift_speed;
-	motor[liftR] = -lift_speed;
+	motor[liftL] = -127;
+	motor[liftR] = -127;
+}
+
+void deckRemain(void){
+	int keep_up = 50;
+	motor[liftL] = motor[liftR] = keep_up;
 }
 
 void deckOff(void){
@@ -290,9 +295,9 @@ void stopWheels(void){
 //start facing perpendicular to wall w./ goals
 void auto3blueB(void){
 	int Ti1 = 1000;	//time to get to rails
-	int Ti2 = 700; //time to get into position to knock balls over rail
-	int Ti3 = 500; //time to rotate and knock balls over rail
-	int Ti4 = 2500; // time to get to goal post
+	int Ti2 = 1215; //time to get into position to knock balls over rail
+	int Ti3 = 1300; //time to rotate and knock balls over rail
+	int Ti4 = 3000; // time to get to goal post
 	int Ti5 = 2000; // time to let bucky ball out
 	//get whisks ready
 	rotIn();
@@ -301,6 +306,7 @@ void auto3blueB(void){
 	//elevate platform
 	deckUp();
 	wait1Msec(500);
+	deckRemain();
 	//go forward
 	moveForward(1);
 	wait1Msec(Ti1);
@@ -312,17 +318,15 @@ void auto3blueB(void){
 	//move into position for goal and second large ball
 	moveForward(1);
 	wait1Msec(Ti2);
-	deckOff();
 	stopWheels();
 	//take right turn
 	rotate(rightturn);
 	wait1Msec(rightturn);
 	stopWheels();
-	rotIn();
-
 	//back up and shut off moving deck up
+	//turn towards goal
 	moveForward(-1);
-	wait1Msec(400);
+	wait1Msec(600);
 	stopWheels();
 	//move deck all the way down
 	deckDown();
@@ -330,11 +334,14 @@ void auto3blueB(void){
 	deckOff();
 	//move up to the to the foot of the goal
 	moveForward(1);
-	wait1Msec(Ti4);
+	wait1Msec(1700);
 	stopWheels();
 	//elevate deck and rotate whisks outward to score a "goal"
 	deckUp();
 	wait1Msec(1500);
+	moveForward(1);
+	wait1Msec(1000);
+	stopWheels();
 	rotOut();
 	wait1Msec(2000);
 	deckOff();
@@ -396,16 +403,5 @@ void auto3redB(void){
 }
 
 task main(){
-	//go forward test
-	moveForward(1);
-	wait10Msec(10);
-	stopWheels();
-	wait10Msec(10);
-	//rotate left test
-	//rotate(leftturn);
-	//wait1Msec(leftturn);
-	//stopWheels();
-	//wait10Msec(10);
-
 	auto3blueB();
 }
