@@ -180,11 +180,11 @@ void deckUp(void){
 }
 
 void moveForward(int period){
-	int left_speed = 80;
-	int right_speed = -85;
-	motor[RwheelL] = motor[FwheelL] = left_speed;
-	motor[RwheelR] = motor[FwheelR] = right_speed;
+	int left_speed = 60;
+	int right_speed = -120;
 	ClearTimer(T1);
+	motor[RwheelR] = motor[FwheelR] = right_speed;
+	motor[RwheelL] = motor[FwheelL] = left_speed;
 	while(time1[T1] < period){
 
 	}
@@ -203,9 +203,9 @@ task deckDown(){
 }
 
 void throwauto(void){
-	SensorValue[solenoid2] = SensorValue[solenoid1] = 1;
+	SensorValue[solenoid1] = 1;
 	wait10Msec(50);
-	SensorValue[solenoid2] = SensorValue[solenoid1] = 0;
+	SensorValue[solenoid1] = 0;
 }
 
 void rotOut(int period){
