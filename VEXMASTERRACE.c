@@ -60,8 +60,7 @@ task Lift()
     else
      {
       motor[liftL] = 0;
-      motor[liftR] = 0;
-     }
+      motor[liftR] = 0;     }
 	 }
 	}
 }
@@ -129,7 +128,7 @@ task spin()
 //{
 //while(1==1)
 // {
-//  StartTask(Drive);   /*driver 1*/
+//  StartTask(Drive);   /*driver 1*/2
 //	StartTask(Lift);   /*driver 2*/
 //  StartTask(throw);	/*driver 1*/
 //	StartTask(bar);		/*driver 2*/
@@ -139,67 +138,48 @@ task spin()
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-int lift_speed = 60;
-int lift_period = 2000;
-int rightturn = 700; //millis to execute right turn
-int turnaround = -2000;
-int leftturn = -650;
+int lift_speed = 127;
+int rightturn = 650; //millis to execute right turn
+int leftturn = -575;
+int turnaround = 1400;
+
 
 void rotate(signed int check1){
-	int wheel_setting = 100;
-	if (check1 < 0){
-		check1 = -check1;
-		wheel_setting = -wheel_setting;
-		ClearTimer(T1);
-		motor[RwheelL]= motor[FwheelL] = wheel_setting;
-		motor[RwheelR] = motor[FwheelR] = wheel_setting;
-		while (time1[T1] < check1){}
-		motor[RwheelR] = motor[FwheelR] = 0;
-		motor[RwheelL] = motor[FwheelL] = 0;
+	int wheel_speed = 100;
+	if (check1 > 0){
+		motor[RwheelL]= motor[FwheelL] = wheel_speed;
+		motor[RwheelR] = motor[FwheelR] = wheel_speed;
   }
-  else if(check1 > 0){
-  	ClearTimer(T1);
-  	motor[RwheelL]= motor[FwheelL] = wheel_setting;
-  	motor[RwheelR] = motor[FwheelR] = wheel_setting;
-  	while (time1[T1] < check1){
-  	}
-  	motor[RwheelL] = motor[FwheelL] = 0;
-  	motor[RwheelR] = motor[FwheelR] = 0;
+  else if(check1 < 0){
+  	motor[RwheelL]= motor[FwheelL] = -wheel_speed;
+  	motor[RwheelR] = motor[FwheelR] = -wheel_speed;
 	}
 }
 
 void deckUp(void){
-	motor[liftL] = lift_speed;
-	motor[liftR] = lift_speed;
-	ClearTimer(T1);
-	while(time1[T1] < lift_period){
-
-	}
-	motor[liftL] = 0;
-	motor[liftR] = 0;
+	motor[liftR] = motor[liftL] = lift_speed;
 }
 
-void moveForward(int period){
-	int left_speed = 60;
+void moveForward(int direction){
+	int left_speed = 80;
 	int right_speed = -120;
-	ClearTimer(T1);
-	motor[RwheelR] = motor[FwheelR] = right_speed;
-	motor[RwheelL] = motor[FwheelL] = left_speed;
-	while(time1[T1] < period){
-
+	if (direction > 0){
+		motor[RwheelR] = motor[FwheelR] = right_speed;
+		motor[RwheelL] = motor[FwheelL] = left_speed;
 	}
-	motor[RwheelR] = motor[FwheelR]= motor[RwheelL] = motor[FwheelL] = 0;
+	else if (direction < 0){
+		motor[RwheelR] = motor[FwheelR] = -right_speed;
+		motor[RwheelL] = motor[FwheelL] = -left_speed;
+}
 }
 
-task deckDown(){
+void deckDown(void){
 	motor[liftL] = -lift_speed;
-	motor[liftR] = lift_speed;
-	ClearTimer(T1);
-	while(time1[T1] < lift_period){
-		wait10Msec(10);
-	}
-	motor[liftL] = 0;
-	motor[liftR] = 0;
+	motor[liftR] = -lift_speed;
+}
+
+void deckOff(void){
+ 	motor[liftR] = motor[liftL] = 0;
 }
 
 void throwauto(void){
@@ -208,105 +188,224 @@ void throwauto(void){
 	SensorValue[solenoid1] = 0;
 }
 
-void rotOut(int period){
-	int rot_speed = 80;
+void rotOut(){
+	int rot_speed = 127;
 	motor[whiskL] = -rot_speed;
 	motor[whiskR] = rot_speed;
-	ClearTimer(T1);
-	while(time1[T1] < period){}
-	motor[whiskL] = motor[whiskR] = 0;
 }
 
 //rotates the whisks to bring balls in
-void rotIn(int period){
-	int rot_speed = 80;
+void rotIn(void){
+	int rot_speed = 127;
 	motor[whiskL] = rot_speed;
 	motor[whiskR] = -rot_speed;
-	ClearTimer(T1);
-	while(time1[T1] < period){}
+}
+
+void rotOff(void){
 	motor[whiskL] = motor[whiskR] = 0;
+}
+
+void stopWheels(void){
+	motor[FwheelL] = motor[FwheelR] = motor[RwheelL] = motor[RwheelR] = 0;
 }
 
 
 //all tasks are of form auto<autonomous-version><color><location>
 //location is "A" for closest to bar, "B" for other position
 
-void auto1blueA(void){
-	//setup: have it facing towards the blue hanging pole, parallel to the side
-	//spin whisks inward left clockwise, right counter-c.
-	int Ti1 = 2000;//time to get to gather bucky balls
-	int Ti2 = 1000;//time tgt. alignment w/ back goal
-	int Ti3 = 5000;//time tgt. back goals
-	int Ti4 = 1000;//time to drop balls into goal
-	rotIn(Ti1);
-	moveForward(Ti1);
-	rotate(rightturn);
-	moveForward(Ti2);
-	rotate(rightturn);
-	moveForward(Ti3);
+//void auto1blueA(void){
+//	//setup: have it facing towards the blue hanging pole, parallel to the side
+//	//spin whisks inward left clockwise, right counter-c.
+//	int Ti1 = 2000;//time to get to gather bucky balls
+//	int Ti2 = 1000;//time tgt. alignment w/ back goal
+//	int Ti3 = 5000;//time tgt. back goals
+//	int Ti4 = 1000;//time to drop balls into goal
+//	rotIn(Ti1);
+//	moveForward(Ti1);
+//	rotate(rightturn);
+//	moveForward(Ti2);
+//	rotate(rightturn);
+//	moveForward(Ti3);
+//	deckUp(4000);
+//	rotOut(Ti4);
+//	rotate(turnaround);
+//	rotate(leftturn);
+//}
+
+//task auto1redA(){
+//	//setup: have it facing towards the blue hanging pole, parallel to the side
+//	//spin whisks inward left clockwise, right counter-c.
+//	int Ti1 = 2000;//time to get to gather bucky balls
+//	int Ti2 = 1000;//time tgt. alignment w/ back goal
+//	int Ti3 = 5000;//time tgt. back goals
+//	int Ti4 = 1000;//time to drop balls into goal
+//	rotIn(Ti1);
+//	moveForward(Ti1);
+//	rotate(rightturn);
+//	moveForward(Ti2);
+//	rotate(leftturn);
+//	moveForward(Ti3);
+//	deckUp(4000);
+//	rotOut(Ti4);
+//	rotate(turnaround);
+//	rotate(rightturn);
+//}
+
+//task auto2blueA(){
+//	int Ti1 = 1000;
+//	int Ti2 = 2000;//get Blue Ball
+//	int Ti3 = 3000;
+//	int Ti4 = 2400;
+//	int Ti5 = 2000;
+//	moveForward(Ti1);
+//	rotIn(Ti2);
+//	rotate(rightturn);
+//	moveForward(Ti3);
+//	deckUp(3000);
+//	throwauto();
+//	rotate(leftturn);
+//	moveForward(Ti4);
+//	rotate(turnaround);
+//	moveForward(Ti5);
+//}
+
+//task auto2redA(){
+//	int Ti1 = 1000;
+//	int Ti2 = 2000;//get Red Ball
+//	int Ti3 = 3000;
+//	int Ti4 = 2400;
+//	int Ti5 = 2000;
+//	moveForward(Ti1);
+//	rotIn(Ti2);
+//	rotate(leftturn);
+//	moveForward(Ti3);
+//	deckUp(3000);
+//	throwauto();
+//	rotate(rightturn);
+//	moveForward(Ti4);
+//	rotate(turnaround);
+//	moveForward(Ti5);
+//}
+
+//start facing perpendicular to wall w./ goals
+void auto3blueB(void){
+	int Ti1 = 1000;	//time to get to rails
+	int Ti2 = 700; //time to get into position to knock balls over rail
+	int Ti3 = 500; //time to rotate and knock balls over rail
+	int Ti4 = 2500; // time to get to goal post
+	int Ti5 = 2000; // time to let bucky ball out
+	//get whisks ready
+	rotIn();
+	wait10Msec(20);
+
+	//elevate platform
 	deckUp();
-	rotOut(Ti4);
-	rotate(turnaround);
+	wait1Msec(500);
+	//go forward
+	moveForward(1);
+	wait1Msec(Ti1);
+	stopWheels();
+	//Turn left
 	rotate(leftturn);
+	wait1Msec(-leftturn);
+	stopWheels();
+	//move into position for goal and second large ball
+	moveForward(1);
+	wait1Msec(Ti2);
+	deckOff();
+	stopWheels();
+	//take right turn
+	rotate(rightturn);
+	wait1Msec(rightturn);
+	stopWheels();
+	rotIn();
+
+	//back up and shut off moving deck up
+	moveForward(-1);
+	wait1Msec(400);
+	stopWheels();
+	//move deck all the way down
+	deckDown();
+	wait1Msec(Ti3);
+	deckOff();
+	//move up to the to the foot of the goal
+	moveForward(1);
+	wait1Msec(Ti4);
+	stopWheels();
+	//elevate deck and rotate whisks outward to score a "goal"
+	deckUp();
+	wait1Msec(1500);
+	rotOut();
+	wait1Msec(2000);
+	deckOff();
+	rotOff();
 }
 
-task auto1redA(){
-	//setup: have it facing towards the blue hanging pole, parallel to the side
-	//spin whisks inward left clockwise, right counter-c.
-	int Ti1 = 2000;//time to get to gather bucky balls
-	int Ti2 = 1000;//time tgt. alignment w/ back goal
-	int Ti3 = 5000;//time tgt. back goals
-	int Ti4 = 1000;//time to drop balls into goal
-	rotIn(Ti1);
-	moveForward(Ti1);
-	rotate(rightturn);
-	moveForward(Ti2);
-	rotate(leftturn);
-	moveForward(Ti3);
-	deckUp();
-	rotOut(Ti4);
-	rotate(turnaround);
-	rotate(rightturn);
-}
+void auto3redB(void){
+	int Ti1 = 1000;	//time to get to rails
+	int Ti2 = 700; //time to get into position to knock balls over rail
+	int Ti3 = 500; //time to rotate and knock balls over rail
+	int Ti4 = 3000; // time to get to goal post
+	int Ti5 = 2000; // time to let bucky ball out
+	//get whisks ready
+	rotIn();
+	wait10Msec(20);
 
-task auto2blueA(){
-	int Ti1 = 1000;
-	int Ti2 = 2000;//get Blue Ball
-	int Ti3 = 3000;
-	int Ti4 = 2400;
-	int Ti5 = 2000;
-	moveForward(Ti1);
-	rotIn(Ti2);
-	rotate(rightturn);
-	moveForward(Ti3);
+	//elevate platform
 	deckUp();
-	throwauto();
+	wait1Msec(500);
+	//go forward
+	moveForward(1);
+	wait1Msec(Ti1);
+	stopWheels();
+	//Turn left
+	rotate(rightturn);
+	wait1Msec(rightturn);
+	stopWheels();
+	//move into position for goal and second large ball
+	moveForward(1);
+	wait1Msec(Ti2);
+	deckOff();
+	stopWheels();
+	//take right turn
 	rotate(leftturn);
-	moveForward(Ti4);
-	rotate(turnaround);
-	moveForward(Ti5);
-}
+	wait1Msec(leftturn);
+	stopWheels();
+	rotIn();
 
-task auto2redA(){
-	int Ti1 = 1000;
-	int Ti2 = 2000;//get Red Ball
-	int Ti3 = 3000;
-	int Ti4 = 2400;
-	int Ti5 = 2000;
-	moveForward(Ti1);
-	rotIn(Ti2);
-	rotate(leftturn);
-	moveForward(Ti3);
+	//back up and shut off moving deck up
+	moveForward(-1);
+	wait1Msec(500);
+	stopWheels();
+	//move deck all the way down
+	deckDown();
+	wait1Msec(Ti3);
+	deckOff();
+	//move up to the to the foot of the goal
+	moveForward(1);
+	wait1Msec(1000);
 	deckUp();
-	throwauto();
-	rotate(rightturn);
-	moveForward(Ti4);
-	rotate(turnaround);
-	moveForward(Ti5);
+	wait1Msec(1500);
+	stopWheels();
+	//elevate deck and rotate whisks outward to score a "goal"
+	wait1Msec(1500);
+	rotOut();
+	wait1Msec(2000);
+	deckOff();
+	rotOff();
 }
 
 task main(){
-	moveForward(3000);
-	wait10Msec(100);
-	rotate(leftturn);
+	//go forward test
+	moveForward(1);
+	wait10Msec(10);
+	stopWheels();
+	wait10Msec(10);
+	//rotate left test
+	//rotate(leftturn);
+	//wait1Msec(leftturn);
+	//stopWheels();
+	//wait10Msec(10);
+
+	auto3blueB();
 }
