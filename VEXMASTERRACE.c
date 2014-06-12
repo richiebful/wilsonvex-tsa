@@ -124,17 +124,17 @@ task spin()
 }
 //+++++++++++++++++++++++++++++++++++++++++++++| MAIN |+++++++++++++++++++++++++++++++++++++++++++++++
 
-//task main()
-//{
-//while(1==1)
-// {
-//  StartTask(Drive);   /*driver 1*/2
-//	StartTask(Lift);   /*driver 2*/
-//  StartTask(throw);	/*driver 1*/
-//	StartTask(bar);		/*driver 2*/
-//	StartTask(spin);	/*driver 2*/
-// }
-//}
+task main()
+{
+while(1==1)
+ {
+  StartTask(Drive);   /*driver 1*/
+	StartTask(Lift);   /*driver 2*/
+  StartTask(throw);	/*driver 1*/
+	StartTask(bar);		/*driver 2*/
+	StartTask(spin);	/*driver 2*/
+ }
+}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -218,43 +218,53 @@ void stopWheels(void){
 //all tasks are of form auto<autonomous-version><color><location>
 //location is "A" for closest to bar, "B" for other position
 
-//void auto1blueA(void){
-//	//setup: have it facing towards the blue hanging pole, parallel to the side
-//	//spin whisks inward left clockwise, right counter-c.
-//	int Ti1 = 2000;//time to get to gather bucky balls
-//	int Ti2 = 1000;//time tgt. alignment w/ back goal
-//	int Ti3 = 5000;//time tgt. back goals
-//	int Ti4 = 1000;//time to drop balls into goal
-//	rotIn(Ti1);
-//	moveForward(Ti1);
-//	rotate(rightturn);
-//	moveForward(Ti2);
-//	rotate(rightturn);
-//	moveForward(Ti3);
-//	deckUp(4000);
-//	rotOut(Ti4);
-//	rotate(turnaround);
-//	rotate(leftturn);
-//}
+void auto1blueA(void){
+	//facing towards this colour's hanging pole, parallel to the side closest to it,
+	//use the bumper behind it to line it up
 
-//task auto1redA(){
-//	//setup: have it facing towards the blue hanging pole, parallel to the side
-//	//spin whisks inward left clockwise, right counter-c.
-//	int Ti1 = 2000;//time to get to gather bucky balls
-//	int Ti2 = 1000;//time tgt. alignment w/ back goal
-//	int Ti3 = 5000;//time tgt. back goals
-//	int Ti4 = 1000;//time to drop balls into goal
-//	rotIn(Ti1);
-//	moveForward(Ti1);
-//	rotate(rightturn);
-//	moveForward(Ti2);
-//	rotate(leftturn);
-//	moveForward(Ti3);
-//	deckUp(4000);
-//	rotOut(Ti4);
-//	rotate(turnaround);
-//	rotate(rightturn);
-//}
+	//moves forward and picks up buckyballs
+	rotIn();
+	wait1Msec(100);
+	moveForward(1);
+	wait1Msec(1000);
+	stopWheels();
+	//turn around, continue rotating whisks inward to keep buckies on
+	rotate(turnaround);
+	wait1Msec(turnaround);
+	stopWheels();
+	//move forward over barricade
+	moveForward(1);
+	wait1Msec(3500);
+	stopWheels();
+	//whisk buckies outward
+	rotOff();
+	rotOut();
+	wait1Msec(3000);
+}
+
+void auto1redA(void){
+	//facing towards this colour's hanging pole, parallel to the side closest to it,
+	//use the bumper behind it to line it up
+
+	//moves forward and picks up buckyballs
+	rotIn();
+	wait1Msec(100);
+	moveForward(1);
+	wait1Msec(1000);
+	stopWheels();
+	//turn around, continue rotating whisks inward to keep buckies on
+	rotate(turnaround);
+	wait1Msec(turnaround);
+	stopWheels();
+	//move forward over barricade
+	moveForward(1);
+	wait1Msec(3500);
+	stopWheels();
+	//whisk buckies outward
+	rotOff();
+	rotOut();
+	wait1Msec(3000);
+}
 
 //task auto2blueA(){
 //	int Ti1 = 1000;
@@ -356,7 +366,6 @@ void auto3redB(void){
 	//get whisks ready
 	rotIn();
 	wait10Msec(20);
-
 	//elevate platform
 	deckUp();
 	wait1Msec(500);
@@ -403,6 +412,6 @@ void auto3redB(void){
 }
 
 
-task main(){
-	auto3blueB();
-}
+//task main(){
+//	auto3blueB();
+//}
