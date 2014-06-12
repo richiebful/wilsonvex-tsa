@@ -260,12 +260,49 @@ void auto1redA(void){
 	moveForward(1);
 	wait1Msec(3500);
 	stopWheels();
-	//whisk buckies outward
+	//whisk buckies outward into scoring zone
 	rotOff();
 	rotOut();
 	wait1Msec(3000);
 }
-
+//face in sm. dir. as auto1blueA
+void auto2blueA(void){
+	rotIn();
+	wait1Msec(100);
+	moveForward(1);
+	wait1Msec(1000);
+	stopWheels();
+	rotate(turnaround);
+	wait1Msec(turnaround);
+	stopWheels();
+	//move forward over barricade
+	moveForward(1);
+	wait1Msec(1000);
+	stopWheels();
+	//whisk buckies outward into intermediate zone
+	rotOff();
+	rotOut();
+	//backup, turn right
+	moveForward(-1);
+	wait1Msec(400);
+	stopWheels();
+	rotate(leftturn);
+	wait1Msec(-leftturn);
+	stopWheels();
+	// move forward, then turn right to move large ball
+	moveForward(1);
+	wait1Msec(1000);
+	stopWheels();
+	rotate(rightturn);
+	wait1Msec(rightturn);
+	stopWheels();
+	moveForward(1);
+	rotOut();
+	wait1Msec(400);
+	stopWheels();
+	rotOff();
+	//complete later, see drawing in orange binder.
+}
 //task auto2blueA(){
 //	int Ti1 = 1000;
 //	int Ti2 = 2000;//get Blue Ball
