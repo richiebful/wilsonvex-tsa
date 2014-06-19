@@ -31,7 +31,7 @@ Pseudocode: Is for Squares.
 task Drive()
 {
 	while(true)
-  {
+	{
 		motor[RwheelL]  = (vexRT[Ch2] + vexRT[Ch1])/2;  // (y + x)/2
 		motor[FwheelL]  = (vexRT[Ch1] + vexRT[Ch2])/2;  // (y + x)/2
 		motor[RwheelR] = (vexRT[Ch2] - vexRT[Ch1])/-2;  // (y - x)/2
@@ -45,23 +45,23 @@ task Lift()
 {
 	while(true)
 	{
-    if(vexRT[Btn6UXmtr2] == 1)
-    {
-      motor[liftL] = 127;
-      motor[liftR] = 127;
-    }
-    else
-    {
-      if(vexRT[Btn6DXmtr2] == 1)
-     {
-         motor[liftL] = -127;
-         motor[liftR] = -127;
-     }
-    else
-     {
-      motor[liftL] = 0;
-      motor[liftR] = 0;     }
-	 }
+		if(vexRT[Btn6UXmtr2] == 1)
+		{
+			motor[liftL] = 127;
+			motor[liftR] = 127;
+		}
+		else
+		{
+			if(vexRT[Btn6DXmtr2] == 1)
+			{
+				motor[liftL] = -127;
+				motor[liftR] = -127;
+			}
+			else
+			{
+				motor[liftL] = 0;
+				motor[liftR] = 0;     }
+		}
 	}
 }
 //====================================================================================================
@@ -70,15 +70,15 @@ task Lift()
 task throw()
 {
 	while(true)
-  {
+	{
 		if(vexRT[Btn7R] == 1)
 		{
 			SensorValue[solenoid1] = 1;
-	  }
-	  else
-	  {
-	  	SensorValue[solenoid1] = 0;
-	  }
+		}
+		else
+		{
+			SensorValue[solenoid1] = 0;
+		}
 	}
 }
 //====================================================================================================
@@ -90,51 +90,51 @@ task bar()
 		if(vexRT[Btn7UXmtr2] == 1)
 		{
 			SensorValue[solenoid2] = 1;
-	  }
-	  else
-	  {
-	  	SensorValue[solenoid2] = 0;
-	  }
-  }
+		}
+		else
+		{
+			SensorValue[solenoid2] = 0;
+		}
+	}
 }
 //==========================================|Task Spin|==============================================
 task spin()
 {
 	while(true)
-  {
-	 if(vexRT[Btn5UXmtr2] == 1)
+	{
+		if(vexRT[Btn5UXmtr2] == 1)
 		{
-		  motor(whiskL) = 127;
-		  motor(whiskR) = -127;
-	  }
-	 else
-    {
-    if(vexRT[Btn5DXmtr2] == 1)
-     {
-	  	motor(whiskL) = -127;
-	  	motor(whiskR) = 127;
-	   }
-	  else if(vexRT[Btn8LXmtr2] == 1)
-	   {
-		  motor(whiskL) = 0;
-		  motor(whiskR) = 0;
-	   }
-    }
-	 }
+			motor(whiskL) = 127;
+			motor(whiskR) = -127;
+		}
+		else
+		{
+			if(vexRT[Btn5DXmtr2] == 1)
+			{
+				motor(whiskL) = -127;
+				motor(whiskR) = 127;
+			}
+			else if(vexRT[Btn8LXmtr2] == 1)
+			{
+				motor(whiskL) = 0;
+				motor(whiskR) = 0;
+			}
+		}
+	}
 }
 //+++++++++++++++++++++++++++++++++++++++++++++| MAIN |+++++++++++++++++++++++++++++++++++++++++++++++
 
-task main()
-{
-while(1==1)
- {
-  StartTask(Drive);   /*driver 1*/
-	StartTask(Lift);   /*driver 2*/
-  StartTask(throw);	/*driver 1*/
-	StartTask(bar);		/*driver 2*/
-	StartTask(spin);	/*driver 2*/
- }
-}
+//task main()
+//{
+//	while(1==1)
+//	{
+//		StartTask(Drive);   /*driver 1*/
+//		StartTask(Lift);   /*driver 2*/
+//		StartTask(throw);	/*driver 1*/
+//		StartTask(bar);		/*driver 2*/
+//		StartTask(spin);	/*driver 2*/
+//	}
+//}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -149,10 +149,10 @@ void rotate(signed int check1){
 	if (check1 > 0){
 		motor[RwheelL]= motor[FwheelL] = wheel_speed;
 		motor[RwheelR] = motor[FwheelR] = wheel_speed;
-  }
-  else if(check1 < 0){
-  	motor[RwheelL]= motor[FwheelL] = -wheel_speed;
-  	motor[RwheelR] = motor[FwheelR] = -wheel_speed;
+	}
+	else if(check1 < 0){
+		motor[RwheelL]= motor[FwheelL] = -wheel_speed;
+		motor[RwheelR] = motor[FwheelR] = -wheel_speed;
 	}
 }
 
@@ -170,7 +170,7 @@ void moveForward(int direction){
 	else if (direction < 0){
 		motor[RwheelR] = motor[FwheelR] = -right_speed;
 		motor[RwheelL] = motor[FwheelL] = -left_speed;
-}
+	}
 }
 
 void deckDown(void){
@@ -184,7 +184,7 @@ void deckRemain(void){
 }
 
 void deckOff(void){
- 	motor[liftR] = motor[liftL] = 0;
+	motor[liftR] = motor[liftL] = 0;
 }
 
 void throwauto(void){
@@ -303,41 +303,6 @@ void auto2blueA(void){
 	rotOff();
 	//complete later, see drawing in orange binder.
 }
-//task auto2blueA(){
-//	int Ti1 = 1000;
-//	int Ti2 = 2000;//get Blue Ball
-//	int Ti3 = 3000;
-//	int Ti4 = 2400;
-//	int Ti5 = 2000;
-//	moveForward(Ti1);
-//	rotIn(Ti2);
-//	rotate(rightturn);
-//	moveForward(Ti3);
-//	deckUp(3000);
-//	throwauto();
-//	rotate(leftturn);
-//	moveForward(Ti4);
-//	rotate(turnaround);
-//	moveForward(Ti5);
-//}
-
-//task auto2redA(){
-//	int Ti1 = 1000;
-//	int Ti2 = 2000;//get Red Ball
-//	int Ti3 = 3000;
-//	int Ti4 = 2400;
-//	int Ti5 = 2000;
-//	moveForward(Ti1);
-//	rotIn(Ti2);
-//	rotate(leftturn);
-//	moveForward(Ti3);
-//	deckUp(3000);
-//	throwauto();
-//	rotate(rightturn);
-//	moveForward(Ti4);
-//	rotate(turnaround);
-//	moveForward(Ti5);
-//}
 
 //start facing perpendicular to wall w./ goals
 void auto3blueB(void){
@@ -449,6 +414,192 @@ void auto3redB(void){
 }
 
 
-//task main(){
-//	auto3blueB();
-//}
+const short leftButton = 1;
+const short centerButton = 2;
+const short rightButton = 4;
+
+//Wait for Press--------------------------------------------------
+void waitForPress()
+{
+	while(nLCDButtons == 0){}
+	wait1Msec(5);
+}
+//----------------------------------------------------------------
+
+//Wait for Release------------------------------------------------
+void waitForRelease()
+{
+	while(nLCDButtons != 0){}
+	wait1Msec(5);
+}
+
+void dispSideSelect(void){
+	displayLCDCenteredString(0, "<< Red");
+	displayLCDCenteredString(1, "Blue >>");
+}
+
+void chooseCode(int autoCode){
+	clearLCDLine(0);
+	clearLCDLine(1);
+	switch(autoCode){
+		case 0:
+			displayLCDCenteredString(0,"auto1redA");
+			displayLCDCenteredString(1,"Running");
+			break;
+		case 1:
+			displayLCDCenteredString(0,"auto1blueA");
+			displayLCDCenteredString(1,"Running");
+			break;
+		case 10:
+			displayLCDCenteredString(0,"auto2redA");
+			displayLCDCenteredString(1,"Running");
+			break;
+		case 11:
+			displayLCDCenteredString(0,"auto2blueA");
+			displayLCDCenteredString(1,"Running");
+			break;
+		case 20:
+			displayLCDCenteredString(0,"auto2redB");
+			displayLCDCenteredString(1,"Running");
+			break;
+		case 21:
+			displayLCDCenteredString(0,"auto2blueB");
+			displayLCDCenteredString(1,"Running");
+			break;
+	}
+}
+//----------------------------------------------------------------
+void autonomousSide(int count){
+	//------------- Beginning of Side Selection ---------------
+	//Clear LCD
+	int autoCode;
+	clearLCDLine(0);
+	clearLCDLine(1);
+	//Switch Case that actually runs the user choice
+	switch(count){
+	case 0:
+		//If count = 0, run the code correspoinding with choice 1
+		dispSideSelect();
+		waitForPress();
+		if (nLCDButtons == leftButton){
+			waitForRelease();
+			autoCode = 0;
+		}
+		else if(nLCDButtons == rightButton){
+			waitForRelease();
+			autoCode = 1;
+		}
+		break;
+	case 1:
+		//If count = 1, run the code correspoinding with choice 2
+		dispSideSelect();
+		waitForPress();
+		if (nLCDButtons == leftButton){
+			waitForRelease();
+			autoCode = 10;
+		}
+		else if(nLCDButtons == rightButton){
+			waitForRelease();
+			autoCode = 11;
+		}
+		break;
+	case 2:
+		//If count = 2, run the code correspoinding with choice 3
+		dispSideSelect();
+		waitForPress();
+		if (nLCDButtons == leftButton){
+			waitForRelease();
+			autoCode = 20;
+		}
+		else if(nLCDButtons == rightButton){
+			waitForRelease();
+			autoCode = 21;
+		}
+		break;
+	default:
+		displayLCDCenteredString(0, "No valid choice");
+		displayLCDCenteredString(1, "was made!");
+		break;
+	}
+	chooseCode(autoCode);
+	//------------- End of Robot Movement Code -----------------------
+}
+
+
+task autoCodeSelector()
+{
+	//Declare count variable to keep track of our choice
+	int count = 0;
+
+	//------------- Beginning of User Interface Code ---------------
+	//Clear LCD
+	clearLCDLine(0);
+	clearLCDLine(1);
+	//Loop while center button is not pressed
+	while(nLCDButtons != centerButton)
+	{
+		//Switch case that allows the user to choose from 4 different options
+		switch(count){
+		case 0:
+			//Display first choice
+			displayLCDCenteredString(0, "Auto1-Hang");
+			displayLCDCenteredString(1, "<		 Enter		>");
+			waitForPress();
+			//Increment or decrement "count" based on button press
+			if(nLCDButtons == leftButton)
+			{
+				waitForRelease();
+				count = 2;
+			}
+			else if(nLCDButtons == rightButton)
+			{
+				waitForRelease();
+				count++;
+			}
+			break;
+		case 1:
+			//Display second choice
+			displayLCDCenteredString(0, "Auto2-Hang");
+			displayLCDCenteredString(1, "<		 Enter		>");
+			waitForPress();
+			//Increment or decrement "count" based on button press
+			if(nLCDButtons == leftButton)
+			{
+				waitForRelease();
+				count--;
+			}
+			else if(nLCDButtons == rightButton)
+			{
+				waitForRelease();
+				count++;
+			}
+			break;
+		case 2:
+			//Display third choice
+			displayLCDCenteredString(0, "Auto3-Mid");
+			displayLCDCenteredString(1, "<		 Enter		>");
+			waitForPress();
+			//Increment or decrement "count" based on button press
+			if(nLCDButtons == leftButton)
+			{
+				waitForRelease();
+				count--;
+			}
+			else if(nLCDButtons == rightButton)
+			{
+				waitForRelease();
+				count = 0;
+			}
+			break;
+		default:
+			count = 0;
+			break;
+		}
+	}
+	autonomousSide(count);
+}
+
+task main(){
+	StartTask(autoCodeSelector);
+}
+	//------------- End of User Interface Code ---------------------
