@@ -32,10 +32,10 @@ task Drive()
 {
 	while(true)
 	{
-		motor[RwheelL]  = (vexRT[Ch2] + vexRT[Ch1])/2;  // (y + x)/2
-		motor[FwheelL]  = (vexRT[Ch1] + vexRT[Ch2])/2;  // (y + x)/2
-		motor[RwheelR] = (vexRT[Ch2] - vexRT[Ch1])/-2;  // (y - x)/2
-		motor[FwheelR] = (vexRT[Ch1] - vexRT[Ch2])/2;   // (y - x)/2
+		motor[RwheelL]  = (vexRT[Ch2] + vexRT[Ch4])/2;  // (y + x)/2
+		motor[FwheelL]  = (vexRT[Ch4] + vexRT[Ch2])/2;  // (y + x)/2
+		motor[RwheelR] = (vexRT[Ch2] - vexRT[Ch4])/-2;  // (y - x)/2
+		motor[FwheelR] = (vexRT[Ch4] - vexRT[Ch2])/2;   // (y - x)/2
 	}
 }
 //====================================================================================================
@@ -124,21 +124,21 @@ task spin()
 }
 //+++++++++++++++++++++++++++++++++++++++++++++| MAIN |+++++++++++++++++++++++++++++++++++++++++++++++
 
-//task main()
-//{
-//	while(1==1)
-//	{
-//		StartTask(Drive);   /*driver 1*/
-//		StartTask(Lift);   /*driver 2*/
-//		StartTask(throw);	/*driver 1*/
-//		StartTask(bar);		/*driver 2*/
-//		StartTask(spin);	/*driver 2*/
-//	}
-//}
+task main()
+{
+	while(1==1)
+	{
+		StartTask(Drive);   /*driver 1*/
+		StartTask(Lift);   /*driver 2*/
+		StartTask(throw);	/*driver 1*/
+		StartTask(bar);		/*driver 2*/
+		StartTask(spin);	/*driver 2*/
+	}
+}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-int lift_speed = 100;
+ int lift_speed = 100;
 int rightturn = 660; //millis to execute right turn
 int leftturn = -560;
 int turnaround = 1400;
@@ -599,7 +599,8 @@ task autoCodeSelector()
 	autonomousSide(count);
 }
 
-task main(){
-	StartTask(autoCodeSelector);
-}
+//task main(){
+//	StartTask(autoCodeSelector);
+//}
+
 	//------------- End of User Interface Code ---------------------
