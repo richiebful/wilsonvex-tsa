@@ -579,6 +579,10 @@ void autoCodeSelector(void)
 				waitForRelease();
 				count++;
 			}
+			else if(nLCDButtons == centerButton){
+				waitForRelease();
+				autonomousSide(count);
+			}
 			break;
 		case 1:
 			//Display second choice
@@ -597,6 +601,10 @@ void autoCodeSelector(void)
 				waitForRelease();
 				count++;
 			}
+			else if(nLCDButtons == centerButton){
+				waitForRelease();
+				autonomousSide(count);
+			}
 			break;
 		case 2:
 			//Display third choice
@@ -613,6 +621,10 @@ void autoCodeSelector(void)
 			{
 				waitForRelease();
 				count = 0;
+			}
+			else if(nLCDButtons == centerButton){
+				waitForRelease();
+				autonomousSide(count);
 			}
 			break;
 		default:
